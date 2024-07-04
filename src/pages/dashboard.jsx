@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { MdOutlineDoneOutline } from "react-icons/md";
 import { GrStatusWarningSmall } from "react-icons/gr";
-import { useNavigate } from "react-router-dom";
-import { logoutfunc } from "../utils/apiconfig";
+import Navbar from "./navbar";
 import { decryptedSessionId } from "../utils/cryptconfig";
 import Api from "../utils/axiosconfig";
 
 function Dashboard() {
   const [enrollmentdata, setEnrollmentdata] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  const handlelogout = logoutfunc(navigate);
   useEffect(() => {
     const fetchEnrollmentData = async () => {
       const sessionId = sessionStorage.getItem('session_id');
       const session_key = decryptedSessionId(sessionId);
+
       try {
         const response = await Api.get("/fetch/enrollmentuserspecificdata",{
           headers:{
@@ -32,12 +30,7 @@ function Dashboard() {
   }, []);
   return (
     <section className="className-schedule">
-      <div>
-        <a href="/addclass">
-          <button>View Class</button>
-        </a>
-        <button onClick={handlelogout}>Logout</button>
-      </div>
+      {sessionStorage.getItem('group') ? <Navbar/> : <>Error</>}
       <h3>My Enrollments</h3>
       <p>
         Confirm: <MdOutlineDoneOutline fill="#00FF00" /> Waitlist:{" "}
