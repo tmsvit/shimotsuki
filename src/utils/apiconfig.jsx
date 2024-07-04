@@ -23,7 +23,7 @@ export const loginfunc = (usrname, pass,navigate) => {
           },
         }
       );
-      encryptedSessionId(response.data.session_id)
+      encryptedSessionId(response.data.session_id,response.data.group)
       navigate('/dashboard')
     } catch (error) {
       console.error("Error logging in:", error);
@@ -42,6 +42,7 @@ export const logoutfunc = (navigate) => {
         }
       });
       sessionStorage.removeItem("session_id")
+      sessionStorage.removeItem("group")
       navigate('/')
     } catch (error) {
       console.error('Error logging out:', error);
@@ -49,7 +50,7 @@ export const logoutfunc = (navigate) => {
   }
 }
 
-export const enrollfunc = (courseId,session_key,navigate) => {
+export const enrollfunc = (courseId,navigate) => {
   return async () => {
     const sessionId = sessionStorage.getItem('session_id');
     const session_key = decryptedSessionId(sessionId);
@@ -66,6 +67,52 @@ export const enrollfunc = (courseId,session_key,navigate) => {
       );
       console.log(response.data)
       navigate('/dashboard')
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
+  };
+};
+
+export const unenrollfunc = (courseId,navigate) => {
+  return async () => {
+    const sessionId = sessionStorage.getItem('session_id');
+    const session_key = decryptedSessionId(sessionId);
+    try {
+      const response = await Api.post(
+        `/schedule/unenrollclasses?course_id=${courseId}`,{},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            'Accept': "application/json",
+            'Session-Id': session_key
+          },
+        }
+      );
+      console.log(response.data)
+      navigate('/viewenrollment')
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
+  };
+};
+
+export const addmanually = (courseId,navigate) => {
+  return async () => {
+    const sessionId = sessionStorage.getItem('session_id');
+    const session_key = decryptedSessionId(sessionId);
+    try {
+      const response = await Api.post(
+        `/schedule/addclassmanually?course_id=${courseId}`,{},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            'Accept': "application/json",
+            'Session-Id': session_key
+          },
+        }
+      );
+      console.log(response.data)
+      navigate('/viewenrollment')
     } catch (error) {
       console.error("Error logging in:", error);
     }
