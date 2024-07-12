@@ -1,8 +1,11 @@
 import React from "react";
+import Navbar from "../navbar";
 
 function Aboutclass() {
   return (
     <div>
+      {sessionStorage.getItem('group') ? <Navbar/> : <>Error</>}
+      <br/>
       <div class="enrollment">
         <h1>Enrollment: Add Classes</h1>
         <h2>CSE 6421 - 0010 Computer Architecture</h2>
