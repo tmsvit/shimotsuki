@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { loginfunc } from '../../utils/apiconfig';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,6 +7,16 @@ function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const handleLogin = loginfunc(username, password,navigate);
+  
+  useEffect(() => {
+    const sessionId = sessionStorage.getItem('session_id');
+    if (sessionId) {
+      navigate('/dashboard');
+    } else {
+      navigate('/');
+    }
+  }, [navigate]);
+
   return (
     <div>
       <form method="post" onSubmit={handleLogin}>

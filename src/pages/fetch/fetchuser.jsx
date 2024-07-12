@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Api from "../../utils/axiosconfig";
+import Navbar from '../navbar'
 import { decryptedSessionId } from "../../utils/cryptconfig";
 
 function Fetchuser() {
@@ -29,32 +30,38 @@ function Fetchuser() {
       {loading ? (
         <p>Loading...</p> // Replace with your loading spinner or component
       ) : (
-        <table border={1}>
-          <thead>
-            <tr>
-              <th>User Id</th>
-              <th>Full Name</th>
-              <th>Username</th>
-              <th>University Id</th>
-              <th>Email</th>
-              <th>Dept</th>
-              <th>Group</th>
-            </tr>
-          </thead>
-          <tbody>
-            {userdata.map((userdata) => (
-              <tr key={userdata._id}>
-                <td>{userdata._id}</td>
-                <td>{userdata.first_name} {userdata.last_name}</td>
-                <td>{userdata.username}</td>
-                <td>{userdata.university_id}</td>
-                <td>{userdata.email}</td>
-                <td>{userdata.dept}</td>
-                <td>{userdata.group[0]}</td>
+        <>
+          {sessionStorage.getItem('group') ? <Navbar/> : <>Error</>}
+          <br/>
+          <table border={1}>
+            <thead>
+              <tr>
+                <th>User Id</th>
+                <th>Full Name</th>
+                <th>Username</th>
+                <th>University Id</th>
+                <th>Email</th>
+                <th>Dept</th>
+                <th>Group</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {userdata.map((userdata) => (
+                <tr key={userdata._id}>
+                  <td>{userdata._id}</td>
+                  <td>
+                    {userdata.first_name} {userdata.last_name}
+                  </td>
+                  <td>{userdata.username}</td>
+                  <td>{userdata.university_id}</td>
+                  <td>{userdata.email}</td>
+                  <td>{userdata.dept}</td>
+                  <td>{userdata.group[0]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
       )}
     </div>
   );

@@ -6,9 +6,10 @@ import { MdOutlineDoneOutline } from "react-icons/md";
 import { GrStatusWarningSmall } from "react-icons/gr";
 import { enrollfunc } from "../../utils/apiconfig";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../navbar";
 
 function Confirmation() {
-  const navigate = useNavigate();
+  const nav = useNavigate();
   const [checkdata, setCheckdata] = useState([]);
   const [searchParams] = useSearchParams();
   const courseId = searchParams.get("course_id");
@@ -16,9 +17,7 @@ function Confirmation() {
   const courseDayTime = searchParams.get("course_day_time");
   const courseRoom = searchParams.get("course_room");
   const courseInstr = searchParams.get("course_inst");
-  const sessionId = sessionStorage.getItem('session_id');
-  const session_key = decryptedSessionId(sessionId)
-  const handleEnrollment = enrollfunc(courseId,session_key,navigate);
+  const handleEnrollment = enrollfunc(courseId,nav);
 
   useEffect(() => {
     const fetchCheckAvailibility = async () => {
@@ -45,6 +44,8 @@ function Confirmation() {
 
   return (
     <>
+      {sessionStorage.getItem('group') ? <Navbar/> : <>Error</>}
+      <br/>
       <h1>Enrollment Page</h1>
       <p>Course ID: {courseId}</p>
 

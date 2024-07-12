@@ -4,6 +4,7 @@ import { GrStatusWarningSmall } from "react-icons/gr";
 import Navbar from "./navbar";
 import { decryptedSessionId } from "../utils/cryptconfig";
 import Api from "../utils/axiosconfig";
+import Timetable from "./timetable/timetable";
 
 function Dashboard() {
   const [enrollmentdata, setEnrollmentdata] = useState([]);
@@ -79,6 +80,9 @@ function Dashboard() {
           </tbody>
         </table>
       )}
+      <br/>
+      <h3>Timetable</h3>
+      <Timetable/>  
     </section>
   );
 }
