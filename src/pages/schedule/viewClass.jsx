@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Api from "../../utils/axiosconfig";
 import { decryptedSessionId } from "../../utils/cryptconfig";
+import Navbar from "../navbar";
 
 function Viewclass() {
   const [coursedata, setCoursedata] = useState([]);
@@ -36,6 +37,8 @@ function Viewclass() {
 
   return (
     <div>
+      {sessionStorage.getItem('group') ? <Navbar/> : <>Error</>}
+      <br/>
       <h3>View Classes</h3>
       <input
         type="text"

@@ -1,8 +1,13 @@
 import React from 'react'
+import Navbar from "../navbar"
 
 function Fetchavail() {
   return (
-    <div>Fetchavail</div>
+    <div>
+      {sessionStorage.getItem('group') ? <Navbar/> : <>Error</>}
+      <br/>
+      Fetchavail
+    </div>
   )
 }
 

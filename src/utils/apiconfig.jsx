@@ -50,7 +50,7 @@ export const logoutfunc = (navigate) => {
   }
 }
 
-export const enrollfunc = (courseId,navigate) => {
+export const enrollfunc = (courseId,nav) => {
   return async () => {
     const sessionId = sessionStorage.getItem('session_id');
     const session_key = decryptedSessionId(sessionId);
@@ -65,8 +65,7 @@ export const enrollfunc = (courseId,navigate) => {
           },
         }
       );
-      console.log(response.data)
-      navigate('/dashboard')
+      nav('/dashboard');
     } catch (error) {
       console.error("Error logging in:", error);
     }
@@ -88,8 +87,7 @@ export const unenrollfunc = (courseId,navigate) => {
           },
         }
       );
-      console.log(response.data)
-      navigate('/viewenrollment')
+      navigate('/dashboard')
     } catch (error) {
       console.error("Error logging in:", error);
     }

@@ -13,6 +13,9 @@ function Navbar() {
       {/* Admin */}
       {group_type == "admin" ? (
         <>
+          <a href="/">
+            <button>Dashboard</button>
+          </a>
           <a href="/viewclass">
             <button>View Courses</button>
           </a>
@@ -33,6 +36,9 @@ function Navbar() {
       {/* Student */}
       {group_type == "student" ? (
         <>
+          <a href="/">
+            <button>Dashboard</button>
+          </a>
           <a href="/viewclass">
             <button>View Courses</button>
           </a>
@@ -45,6 +51,9 @@ function Navbar() {
       {/* TT Faculty */}
       {group_type == "ttfaculty" ? (
         <>
+          <a href="/">
+            <button>Dashboard</button>
+          </a>
           <a href="/viewclass">
             <button>View Courses</button>
           </a>
