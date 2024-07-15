@@ -28,6 +28,9 @@ function Navbar() {
           <a href="/viewenrollment">
             <button>View Enrollments</button>
           </a>
+          <a href="/addclass">
+            <button>Add Class</button>
+          </a>
           <button onClick={handlelogout}>Logout</button>
         </>
       ) : (
