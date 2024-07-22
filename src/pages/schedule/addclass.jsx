@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import Navbar from "../navbar";
+import { decryptedSessionId } from "../../utils/cryptconfig";
+import Api from "../../utils/axiosconfig";
+import { useNavigate } from "react-router-dom";
 
 const AddClass = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    courseNumber: "",
-    courseName: "",
-    courseFaculty: "",
-    courseRoom: "",
-    courseDay: [],
-    courseCapacity: "",
-    courseUnit: "",
-    courseDept: [],
-    courseTiming: [],
+    course_number: "",
+    course_name: "",
+    course_faculty: "",
+    course_room: "",
+    course_day: [],
+    course_capacity: "",
+    course_unit: "",
+    course_dept: [],
+    course_timing: [],
   });
 
   const handleChange = (e) => {
@@ -33,26 +37,39 @@ const AddClass = () => {
     setFormData({
       ...formData,
       [arrayName]: selectedValues,
-      courseTiming:
-        arrayName === "courseDay"
+      course_timing:
+        arrayName === "course_day"
           ? selectedValues.map(() => "")
-          : formData.courseTiming,
+          : formData.course_timing,
     });
   };
 
   const handleTimingChange = (e, index) => {
     const { value } = e.target;
-    const newTimings = [...formData.courseTiming];
+    const newTimings = [...formData.course_timing];
     newTimings[index] = value;
     setFormData({
       ...formData,
-      courseTiming: newTimings,
+      course_timing: newTimings,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    const sessionId = sessionStorage.getItem('session_id');
+    const session_key = decryptedSessionId(sessionId);
+    try {
+      const response = await Api.post("/schedule/addclass", formData, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          'Session-Id': session_key 
+        },
+      });
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
   };
 
   const timeSlots = [
@@ -76,41 +93,41 @@ const AddClass = () => {
         <label>Course Number</label>
         <input
           type="text"
-          name="courseNumber"
-          value={formData.courseNumber}
+          name="course_number"
+          value={formData.course_number}
           onChange={handleChange}
         />
         <br />
         <label>Course Name</label>
         <input
           type="text"
-          name="courseName"
-          value={formData.courseName}
+          name="course_name"
+          value={formData.course_name}
           onChange={handleChange}
         />
         <br />
         <label>Course Faculty</label>
         <input
           type="text"
-          name="courseFaculty"
-          value={formData.courseFaculty}
+          name="course_faculty"
+          value={formData.course_faculty}
           onChange={handleChange}
         />
         <br />
         <label>Course Room</label>
         <input
           type="text"
-          name="courseRoom"
-          value={formData.courseRoom}
+          name="course_room"
+          value={formData.course_room}
           onChange={handleChange}
         />
         <br />
         <label>Course Day (comma-separated)</label>
         <select
           multiple
-          name="courseDay"
-          value={formData.courseDay}
-          onChange={(e) => handleArrayChange(e, "courseDay")}
+          name="course_day"
+          value={formData.course_day}
+          onChange={(e) => handleArrayChange(e, "course_day")}
         >
           <option value="Monday">Monday</option>
           <option value="Tuesday">Tuesday</option>
@@ -121,12 +138,12 @@ const AddClass = () => {
           <option value="Sunday">Sunday</option>
         </select>
         <br />
-        {formData.courseDay.map((day, index) => (
+        {formData.course_day.map((day, index) => (
           <div key={index}>
             <label>Course Timing for {day}</label>
             <select
-              name={`courseTiming-${index}`}
-              value={formData.courseTiming[index]}
+              name={`course_timing-${index}`}
+              value={formData.course_timing[index]}
               onChange={(e) => handleTimingChange(e, index)}
             >
               <option value="">Select a time slot</option>
@@ -142,25 +159,25 @@ const AddClass = () => {
         <label>Course Capacity</label>
         <input
           type="text"
-          name="courseCapacity"
-          value={formData.courseCapacity}
+          name="course_capacity"
+          value={formData.course_capacity}
           onChange={handleChange}
         />
         <br />
         <label>Course Unit</label>
         <input
           type="text"
-          name="courseUnit"
-          value={formData.courseUnit}
+          name="course_unit"
+          value={formData.course_unit}
           onChange={handleChange}
         />
         <br />
         <label>Course Dept (comma-separated)</label>
         <select
           multiple
-          name="courseDept"
-          value={formData.courseDept}
-          onChange={(e) => handleArrayChange(e, "courseDept")}
+          name="course_dept"
+          value={formData.course_dept}
+          onChange={(e) => handleArrayChange(e, "course_dept")}
         >
           {departments.map((dept, index) => (
             <option key={index} value={dept}>

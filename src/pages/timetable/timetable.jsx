@@ -28,6 +28,43 @@ function Timetable() {
   const enrolled = enrollmentdata.filter(
     (course) => course.status === "Enrolled"
   );
+
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  const timeSlots = [
+    "09:00AM - 10:00AM",
+    "10:00AM - 11:00AM",
+    "11:00AM - 11:15AM", // Break
+    "11:15AM - 12:15PM",
+    "12:15PM - 01:15PM",
+    "01:15PM - 01:45PM", // Break
+    "01:45PM - 02:45PM",
+    "02:45PM - 03:45PM",
+    "03:45PM - 04:45PM",
+    "04:45PM - 05:00PM", // Break
+    "05:00PM - 06:00PM",
+  ];
+  const renderCourseDetails = (day, timeSlot) => {
+    return enrolled.map((course, index) => {
+      const dayIndex = course.course_details.course_day.indexOf(day);
+      if (
+        dayIndex !== -1 &&
+        course.course_details.course_timing[dayIndex] === timeSlot
+      ) {
+        return (
+          <div key={index}>
+            <p>
+              {course.course_details.course_name}
+              <br />
+              {course.course_details.course_faculty}
+              <br />
+              {course.course_details.course_room}
+            </p>
+          </div>
+        );
+      }
+      return null;
+    });
+  };
   return (
     <div>
       {loading ? (
@@ -38,629 +75,30 @@ function Timetable() {
             <thead>
               <tr>
                 <th></th>
-                <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
+                {days.map((day, index) => (
+                  <th key={index}>{day}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
-
-              {/* 09:00AM - 10:00AM */}
-              <tr>
-                <td>09:00AM - 10:00AM</td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Monday") &&
-                      course.course_details.course_timing ===
-                        "09:00AM - 10:00AM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
+              {timeSlots.map((timeSlot, index) => (
+                <tr key={index}>
+                  <td>{timeSlot}</td>
+                  {timeSlot === "11:00AM - 11:15AM" ||
+                  timeSlot === "01:15PM - 01:45PM" ||
+                  timeSlot === "04:45PM - 05:00PM" ? (
+                    <td colSpan={days.length} style={{ textAlign: "center" }}>
+                      Break
+                    </td>
+                  ) : (
+                    days.map((day, dayIndex) => (
+                      <td key={dayIndex}>
+                        {renderCourseDetails(day, timeSlot)}
+                      </td>
+                    ))
                   )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Tuesday") &&
-                      course.course_details.course_timing ===
-                        "09:00AM - 10:00AM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Wednesday") &&
-                      course.course_details.course_timing ===
-                        "09:00AM - 10:00AM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Thursday") &&
-                      course.course_details.course_timing ===
-                        "09:00AM - 10:00AM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Friday") &&
-                      course.course_details.course_timing ===
-                        "09:00AM - 10:00AM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-              </tr>
-
-              {/* 10:00AM - 11:00AM */}
-              <tr>
-                <td>10:00AM - 11:00AM</td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Monday") &&
-                      course.course_details.course_timing ===
-                        "10:00AM - 11:00AM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Tuesday") &&
-                      course.course_details.course_timing ===
-                        "10:00AM - 11:00AM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Wednesday") &&
-                      course.course_details.course_timing ===
-                        "10:00AM - 11:00AM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Thursday") &&
-                      course.course_details.course_timing ===
-                        "10:00AM - 11:00AM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Friday") &&
-                      course.course_details.course_timing ===
-                        "10:00AM - 11:00AM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-              </tr>
-
-              {/* 11:00AM - 11:15AM */}
-              <tr>
-                <td>11:00AM - 11:15AM</td>
-                <td>Break</td>
-                <td>Break</td>
-                <td>Break</td>
-                <td>Break</td>
-                <td>Break</td>
-              </tr>
-
-              {/* 11:15AM - 12:15PM */}
-              <tr>
-                <td>11:15AM - 12:15PM</td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Monday") &&
-                      course.course_details.course_timing ===
-                        "11:15AM - 12:15PM" && (
-                        <div key={index}>
-                          <p>
-                            {course.course_details.course_name}
-                            <br />
-                            {course.course_details.course_faculty}
-                            <br />
-                            {course.course_details.course_room}
-                          </p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Tuesday") &&
-                      course.course_details.course_timing ===
-                        "11:15AM - 12:15PM" && (
-                        <div key={index}>
-                          <p>
-                            {course.course_details.course_name}
-                            <br />
-                            {course.course_details.course_faculty}
-                            <br />
-                            {course.course_details.course_room}
-                          </p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Wednesday") &&
-                      course.course_details.course_timing ===
-                        "11:15AM - 12:15PM" && (
-                        <div key={index}>
-                          <p>
-                            {course.course_details.course_name}
-                            <br />
-                            {course.course_details.course_faculty}
-                            <br />
-                            {course.course_details.course_room}
-                          </p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Thursday") &&
-                      course.course_details.course_timing ===
-                        "11:15AM - 12:15PM" && (
-                        <div key={index}>
-                          <p>
-                            {course.course_details.course_name}
-                            <br />
-                            {course.course_details.course_faculty}
-                            <br />
-                            {course.course_details.course_room}
-                          </p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Friday") &&
-                      course.course_details.course_timing ===
-                        "11:15AM - 12:15PM" && (
-                        <div key={index}>
-                          <p>
-                            {course.course_details.course_name}
-                            <br />
-                            {course.course_details.course_faculty}
-                            <br />
-                            {course.course_details.course_room}
-                          </p>
-                        </div>
-                      )
-                  )}
-                </td>
-              </tr>
-
-              {/* 12:15PM - 1:15PM */}
-              <tr>
-                <td>12:15PM - 1:15PM</td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Monday") &&
-                      course.course_details.course_timing ===
-                        "12:15PM - 1:15PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Tuesday") &&
-                      course.course_details.course_timing ===
-                        "12:15PM - 1:15PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Wednesday") &&
-                      course.course_details.course_timing ===
-                        "12:15PM - 1:15PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Thursday") &&
-                      course.course_details.course_timing ===
-                        "12:15PM - 1:15PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Friday") &&
-                      course.course_details.course_timing ===
-                        "12:15PM - 1:15PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-              </tr>
-
-              {/* 01:15PM - 01:45PM */}
-              <tr>
-                <td>01:15PM - 01:45PM</td>
-                <td>Break</td>
-                <td>Break</td>
-                <td>Break</td>
-                <td>Break</td>
-                <td>Break</td>
-              </tr>
-
-              {/* 01:45PM - 02:45PM */}
-              <tr>
-                <td>01:45PM - 02:45PM</td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Monday") &&
-                      course.course_details.course_timing ===
-                        "01:45PM - 02:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Tuesday") &&
-                      course.course_details.course_timing ===
-                        "01:45PM - 02:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Wednesday") &&
-                      course.course_details.course_timing ===
-                        "01:45PM - 02:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Thursday") &&
-                      course.course_details.course_timing ===
-                        "01:45PM - 02:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Friday") &&
-                      course.course_details.course_timing ===
-                        "01:45PM - 02:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-              </tr>
-
-              {/* 02:45PM - 03:45PM */}
-              <tr>
-                <td>02:45PM - 03:45PM</td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Monday") &&
-                      course.course_details.course_timing ===
-                        "02:45PM - 03:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Tuesday") &&
-                      course.course_details.course_timing ===
-                        "02:45PM - 03:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Wednesday") &&
-                      course.course_details.course_timing ===
-                        "02:45PM - 03:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Thursday") &&
-                      course.course_details.course_timing ===
-                        "02:45PM - 03:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Friday") &&
-                      course.course_details.course_timing ===
-                        "02:45PM - 03:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-              </tr>
-
-              {/* 03:45PM - 04:45PM */}
-              <tr>
-                <td>03:45PM - 04:45PM</td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Monday") &&
-                      course.course_details.course_timing ===
-                        "03:45PM - 04:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Tuesday") &&
-                      course.course_details.course_timing ===
-                        "03:45PM - 04:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Wednesday") &&
-                      course.course_details.course_timing ===
-                        "03:45PM - 04:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Thursday") &&
-                      course.course_details.course_timing ===
-                        "03:45PM - 04:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Friday") &&
-                      course.course_details.course_timing ===
-                        "03:45PM - 04:45PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-              </tr>
-
-              {/* 04:45PM - 05:00PM */}
-              <tr>
-                <td>04:45PM - 05:00PM</td>
-                <td>Break</td>
-                <td>Break</td>
-                <td>Break</td>
-                <td>Break</td>
-                <td>Break</td>
-              </tr>
-
-              {/* 05:00PM - 06:00PM */}
-              <tr>
-                <td>05:00PM - 06:00PM</td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Monday") &&
-                      course.course_details.course_timing ===
-                        "05:00PM - 06:00PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Tuesday") &&
-                      course.course_details.course_timing ===
-                        "05:00PM - 06:00PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Wednesday") &&
-                      course.course_details.course_timing ===
-                        "05:00PM - 06:00PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Thursday") &&
-                      course.course_details.course_timing ===
-                        "05:00PM - 06:00PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-                <td>
-                  {enrolled.map(
-                    (course, index) =>
-                      course.course_details.course_day.includes("Friday") &&
-                      course.course_details.course_timing ===
-                        "05:00PM - 06:00PM" && (
-                        <div key={index}>
-                          <p>{course.course_details.course_name}</p>
-                          <p>{course.course_details.course_faculty}</p>
-                        </div>
-                      )
-                  )}
-                </td>
-              </tr>
+                </tr>
+              ))}
             </tbody>
           </table>
         </>
