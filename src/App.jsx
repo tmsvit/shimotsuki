@@ -9,6 +9,9 @@ import Confirmation from "./pages/schedule/confirmation";
 import Fetchuser from "./pages/fetch/fetchuser";
 import Fetchavail from "./pages/fetch/fetchavail";
 import Fetchenroll from "./pages/fetch/fetchenroll";
+import AddClass from "./pages/schedule/addclass";
+import Test from "./pages/test";
+import Fetchenrollspecific from "./pages/fetch/fetchenrollspecific";
 
 function App() {
   return (
@@ -43,6 +46,18 @@ function App() {
           <Route
             path="/viewenrollment"
             element={<ProtectedRoute component={Fetchenroll} />}
+          />
+          <Route
+            path="/viewenrollment/:param"
+            element={<ProtectedRoute component={Fetchenrollspecific} />}
+          />
+          <Route
+            path="/addclass"
+            element={<ProtectedRoute component={AddClass} />}
+          />
+          <Route
+            path="/test"
+            element={<ProtectedRoute component={Test} />}
           />
         </Routes>
       </Router>
