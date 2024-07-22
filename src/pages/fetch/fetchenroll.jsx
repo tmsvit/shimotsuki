@@ -1,113 +1,91 @@
 import React, { useState, useEffect } from "react";
 import Api from "../../utils/axiosconfig";
-import Navbar from '../navbar'
-import { MdOutlineDoneOutline } from "react-icons/md";
-import { GrStatusWarningSmall } from "react-icons/gr";
 import { decryptedSessionId } from "../../utils/cryptconfig";
-import { useNavigate } from "react-router-dom";
-import { addmanually, unenrollfunc } from "../../utils/apiconfig";
+import Navbar from "../navbar";
 
 function Fetchenroll() {
-  const navigate = useNavigate();
-  const [enrolldata, setEnrolldate] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const handleUnenroll = (courseId) => unenrollfunc(courseId, navigate);
-  const handleAddmanually = (courseId) => addmanually(courseId, navigate);
-
+  const [coursedata, setCoursedata] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   useEffect(() => {
-    const fetchEnrollData = async () => {
-      const sessionId = sessionStorage.getItem("session_id");
+    const fetchCourseData = async () => {
+      const sessionId = sessionStorage.getItem('session_id');
       const session_key = decryptedSessionId(sessionId);
       try {
-        const response = await Api.get("/fetch/enrollmentdata", {
-          headers: {
-            "Session-Id": session_key,
-          },
+        const response = await Api.get("/fetch/coursedata",{
+          headers:{
+            'Session-Id': session_key
+          }
         });
-        setEnrolldate(response.data.data);
-        setLoading(false);
+        setCoursedata(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setLoading(false);
       }
     };
-    fetchEnrollData();
+
+    fetchCourseData();
   }, []);
 
-  console.log(enrolldata)
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredCourses = coursedata.filter((course) =>
+    Object.values(course).some((value) =>
+      typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );  
+
   return (
     <div>
-      {loading ? (
-        <p>Loading...</p> // Replace with your loading spinner or component
-      ) : (
-        <>
-          {sessionStorage.getItem('group') ? <Navbar/> : <>Error</>}
-          <br/>
-          <table border={1}>
-            <thead>
-              <tr>
-                <th>Enroll Id</th>
-                <th>Course Number</th>
-                <th>Course Name</th>
-                <th>Date and Timing</th>
-                <th>Course Room</th>
-                <th>Student's Name</th>
-                <th>Student's Username</th>
-                <th>Student's University Id</th>
-                <th>Course Status</th>
-                <th>Unenroll/Add Manually</th>
-              </tr>
-            </thead>
-            <tbody>
-              {enrolldata.map((enrolldata) => (
-                <tr key={enrolldata._id}>
-                  <td>{enrolldata._id}</td>
-                  <td>{enrolldata.course_number}</td>
-                  <td>{enrolldata.course_name}</td>
-                  <td>
-                    {enrolldata.course_day} {enrolldata.course_timing}
-                  </td>
-                  <td>{enrolldata.course_room}</td>
-                  <td>
-                    {enrolldata.first_name} {enrolldata.last_name}
-                  </td>
-                  <td>{enrolldata.username}</td>
-                  <td>{enrolldata.student_id}</td>
-                  <td>
-                    {enrolldata.status == "Enrolled" ? (
-                      <>
-                        <MdOutlineDoneOutline fill="#00FF00" />
-                      </>
-                    ) : (
-                      <>
-                        <GrStatusWarningSmall fill="#ffae42" />
-                      </>
-                    )}
-                  </td>
-                  <td>
-                    {enrolldata.status == "Enrolled" ? (
-                      <button onClick={handleUnenroll(enrolldata.course_id)}>
-                        Unenroll
-                      </button>
-                    ) : (
-                      <>
-                        <button onClick={handleUnenroll(enrolldata.course_id)}>
-                          Unenroll
-                        </button>
-                        <button
-                          onClick={handleAddmanually(enrolldata.course_id)}
-                        >
-                          Add Manually
-                        </button>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
-      )}
+      {sessionStorage.getItem('group') ? <Navbar/> : <>Error</>}
+      <br/>
+      <h3>View Classes</h3>
+      <input
+        type="text"
+        placeholder="Search"
+        value={searchTerm}
+        onChange={handleSearchChange}
+      />
+      <table border={1}>
+        <thead>
+          <tr>
+            <th>Course Number</th>
+            <th>Description</th>
+            <th>Days/Times</th>
+            <th>Room</th>
+            <th>Instructor</th>
+            <th>Units</th>
+            <th>Capacity</th>
+            <th>Enroll</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredCourses.map((coursedata) => (
+            <tr key={coursedata._id}>
+              <td>
+                <a href={`/aboutclass?course_id=${coursedata._id}`}>
+                  {coursedata.course_number}
+                </a>
+              </td>
+              <td>{coursedata.course_name}</td>
+              <td>
+                {coursedata.course_day}<br/>{coursedata.course_timing}
+              </td>
+              <td>{coursedata.course_room}</td>
+              <td>{coursedata.course_faculty}</td>
+              <td>{coursedata.course_unit}</td>
+              <td>{coursedata.course_capacity}</td>
+              <td>
+                <a
+                  href={`/viewenrollment/${coursedata._id}`}
+                >
+                  <button>View Enrollment</button>
+                </a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
